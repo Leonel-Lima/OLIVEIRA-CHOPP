@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oliveira Chopp — Bar & Cozinha</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg1:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--accent:#f5a623;--text2:#a0a0a0;--border:#333;--success:#1d9e75;--danger:#e24b4a}
+body{background:#0f0f0f;font-family:'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px}
+.header{background:#1a1a1a;border-bottom:1px solid #333;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-size:16px;font-weight:600;color:#fff}
+.logo-sub{font-size:11px;color:var(--text2)}
+.hora{font-size:13px;color:var(--text2);font-weight:600}
+.live-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.ping{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.setor-tabs{display:flex;background:#1a1a1a;border-bottom:1px solid #333}
+.setor-tab{flex:1;padding:14px;font-size:14px;font-weight:700;cursor:pointer;text-align:center;border-bottom:3px solid transparent;transition:.2s;color:var(--text2)}
+.setor-tab.active-bar{color:#378add;border-bottom-color:#378add;background:#1a2535}
+.setor-tab.active-coz{color:#e24b4a;border-bottom-color:#e24b4a;background:#251a1a}
+.setor-tab:hover:not(.active-bar):not(.active-coz){color:#fff}
+.sub-tabs{display:flex;padding:0 14px;gap:4px;border-bottom:1px solid #333;background:#1a1a1a}
+.sub-tab{padding:9px 14px;font-size:12px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.sub-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px}
+.stat{background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.stat-value{font-size:20px;font-weight:700}
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 14px 14px}
+.col{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;min-height:280px}
+.col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.col-title{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.col-count{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.col-novos .col-title{color:#e24b4a}.col-novos .col-count{background:#e24b4a33;color:#e24b4a}
+.col-preparo .col-title{color:var(--accent)}.col-preparo .col-count{background:#f5a62333;color:var(--accent)}
+.col-prontos .col-title{color:var(--success)}.col-prontos .col-count{background:#1d9e7533;color:var(--success)}
+.pedido-card{background:#242424;border:1px solid #2e2e2e;border-radius:10px;padding:12px;margin-bottom:8px}
+.pedido-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.pedido-mesa{font-size:14px;font-weight:700;color:#fff}
+.pedido-timer{font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px}
+.timer-ok{background:#1d9e7533;color:var(--success)}
+.timer-aviso{background:#f5a62333;color:var(--accent)}
+.timer-urgente{background:#e24b4a33;color:#e24b4a}
+.item-linha{font-size:12px;color:#ccc;padding:3px 0;display:flex;gap:6px}
+.item-qty{font-weight:700;color:var(--accent);min-width:20px}
+.item-obs{font-size:11px;color:var(--text2);font-style:italic;margin:6px 0 8px;padding:4px 8px;background:#1a1a1a;border-radius:6px;border-left:2px solid var(--accent)}
+.pedido-btn{width:100%;padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:.15s;margin-top:8px}
+.btn-iniciar{background:#e24b4a;color:#fff}
+.btn-iniciar:hover{background:#c73d3d}
+.btn-pronto{background:var(--accent);color:#000}
+.btn-pronto:hover{background:#d4881a}
+.btn-entregar{background:var(--success);color:#fff}
+.btn-entregar:hover{background:#17845f}
+.historico{padding:0 14px}
+.hist-row{background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.hist-mesa{font-size:14px;font-weight:700;color:#fff;min-width:60px}
+.hist-itens{flex:1;font-size:12px;color:var(--text2)}
+.hist-hora{font-size:11px;color:var(--text2)}
+.hist-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:#1d9e7533;color:var(--success);white-space:nowrap}
+.empty{text-align:center;padding:30px;color:var(--text2);font-size:13px}
+.section{display:none}.section.active{display:block}
+.setor-section{display:none}.setor-section.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo-icon" id="header-icon" style="background:#378add">🍺</div>
+    <div>
+      <div class="logo-text">Oliveira Chopp</div>
+      <div class="logo-sub" id="header-sub">Bar</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="hora" id="relogio"></span>
+    <span class="live-badge" id="live-badge" style="background:#378add33;color:#378add"><span class="ping" style="background:#378add"></span>AO VIVO</span>
+  </div>
+</div>
+
+<div class="setor-tabs">
+  <div class="setor-tab active-bar" id="tab-bar" onclick="setSetor('bar')">🍺 Bar — Bebidas</div>
+  <div class="setor-tab" id="tab-coz" onclick="setSetor('coz')">👨‍🍳 Cozinha — Comidas</div>
+</div>
+
+<!-- BAR -->
+<div class="setor-section active" id="sec-bar">
+  <div class="sub-tabs">
+    <div class="sub-tab active" onclick="showSubTab('bar','pedidos',this)">Pedidos</div>
+    <div class="sub-tab" onclick="showSubTab('bar','historico',this)">Histórico</div>
+  </div>
+  <div class="section active" id="bar-pedidos">
+    <div class="stats" id="bar-stats"></div>
+    <div class="kanban">
+      <div class="col col-novos"><div class="col-header"><span class="col-title">Novos</span><span class="col-count" id="bar-count-novos">0</span></div><div id="bar-novos-body"></div></div>
+      <div class="col col-preparo"><div class="col-header"><span class="col-title">Separando</span><span class="col-count" id="bar-count-preparo">0</span></div><div id="bar-preparo-body"></div></div>
+      <div class="col col-prontos"><div class="col-header"><span class="col-title">Prontos</span><span class="col-count" id="bar-count-prontos">0</span></div><div id="bar-prontos-body"></div></div>
+    </div>
+  </div>
+  <div class="section" id="bar-historico">
+    <div style="padding:14px 14px 8px;font-size:12px;font-weight:700;color:#378add;letter-spacing:.5px;text-transform:uppercase">Bebidas Entregues Hoje</div>
+    <div class="historico" id="bar-hist-body"></div>
+  </div>
+</div>
+
+<!-- COZINHA -->
+<div class="setor-section" id="sec-coz">
+  <div class="sub-tabs">
+    <div class="sub-tab active" onclick="showSubTab('coz','pedidos',this)">Pedidos</div>
+    <div class="sub-tab" onclick="showSubTab('coz','historico',this)">Histórico</div>
+  </div>
+  <div class="section active" id="coz-pedidos">
+    <div class="stats" id="coz-stats"></div>
+    <div class="kanban">
+      <div class="col col-novos"><div class="col-header"><span class="col-title">Novos</span><span class="col-count" id="coz-count-novos">0</span></div><div id="coz-novos-body"></div></div>
+      <div class="col col-preparo"><div class="col-header"><span class="col-title">Em Preparo</span><span class="col-count" id="coz-count-preparo">0</span></div><div id="coz-preparo-body"></div></div>
+      <div class="col col-prontos"><div class="col-header"><span class="col-title">Prontos</span><span class="col-count" id="coz-count-prontos">0</span></div><div id="coz-prontos-body"></div></div>
+    </div>
+  </div>
+  <div class="section" id="coz-historico">
+    <div style="padding:14px 14px 8px;font-size:12px;font-weight:700;color:#e24b4a;letter-spacing:.5px;text-transform:uppercase">Comidas Entregues Hoje</div>
+    <div class="historico" id="coz-hist-body"></div>
+  </div>
+</div>
+
+<script>
+let pedidosBar=[
+  {id:1,mesa:'01',itens:[{nome:'Chopp Pilsen 500ml',qty:3,emoji:'🍺'},{nome:'Refrigerante Lata',qty:2,emoji:'🥤'}],obs:'',status:'novo',criadoEm:Date.now()-3*60000},
+  {id:2,mesa:'04',itens:[{nome:'Cerveja Long Neck',qty:4,emoji:'🍻'}],obs:'Bem gelada',status:'preparo',criadoEm:Date.now()-6*60000},
+  {id:3,mesa:'06',itens:[{nome:'Chopp Escuro 300ml',qty:2,emoji:'🍺'},{nome:'Água Mineral',qty:2,emoji:'💧'}],obs:'',status:'pronto',criadoEm:Date.now()-10*60000},
+];
+let pedidosCoz=[
+  {id:10,mesa:'01',itens:[{nome:'Churrasquinho de Carne',qty:2,emoji:'🍢'},{nome:'Churrasquinho Kafta',qty:2,emoji:'🍢'}],obs:'Sem cebola',status:'novo',criadoEm:Date.now()-3*60000},
+  {id:11,mesa:'02',itens:[{nome:'Porção de Fritas',qty:1,emoji:'🍟'},{nome:'Churrasquinho de Queijo',qty:3,emoji:'🍢'}],obs:'',status:'preparo',criadoEm:Date.now()-8*60000},
+];
+let histBar=[{id:90,mesa:'03',itens:[{nome:'Cerveja Lata',qty:3,emoji:'🍻'}],hora:'18:45'}];
+let histCoz=[{id:91,mesa:'05',itens:[{nome:'Churrasquinho de Frango',qty:2,emoji:'🍢'}],hora:'18:30'}];
+
+function tempo(ms){const min=Math.floor((Date.now()-ms)/60000);return min<1?'agora':min+'min';}
+function timerClass(ms){const min=Math.floor((Date.now()-ms)/60000);return min<5?'timer-ok':min<10?'timer-aviso':'timer-urgente';}
+
+function cardHTML(p,setor){
+  const btnLabel=p.status==='novo'?(setor==='bar'?'Iniciar Separação':'Iniciar Preparo'):p.status==='preparo'?'Marcar Pronto':'Confirmar Entrega';
+  const btnClass=p.status==='novo'?'btn-iniciar':p.status==='preparo'?'btn-pronto':'btn-entregar';
+  const nextStatus=p.status==='novo'?'preparo':p.status==='preparo'?'pronto':'entregue';
+  return `<div class="pedido-card">
+    <div class="pedido-top">
+      <span class="pedido-mesa">Mesa ${p.mesa}</span>
+      <span class="pedido-timer ${timerClass(p.criadoEm)}">${tempo(p.criadoEm)}</span>
+    </div>
+    ${p.itens.map(i=>`<div class="item-linha"><span class="item-qty">${i.qty}x</span><span>${i.emoji} ${i.nome}</span></div>`).join('')}
+    ${p.obs?`<div class="item-obs">Obs: ${p.obs}</div>`:''}
+    <button class="pedido-btn ${btnClass}" onclick="mover('${setor}',${p.id},'${nextStatus}')">${btnLabel}</button>
+  </div>`;
+}
+
+function renderSetor(setor){
+  const pedidos=setor==='bar'?pedidosBar:pedidosCoz;
+  const hist=setor==='bar'?histBar:histCoz;
+  const novos=pedidos.filter(p=>p.status==='novo');
+  const preparo=pedidos.filter(p=>p.status==='preparo');
+  const prontos=pedidos.filter(p=>p.status==='pronto');
+  document.getElementById(`${setor}-count-novos`).textContent=novos.length;
+  document.getElementById(`${setor}-count-preparo`).textContent=preparo.length;
+  document.getElementById(`${setor}-count-prontos`).textContent=prontos.length;
+  document.getElementById(`${setor}-novos-body`).innerHTML=novos.length?novos.map(p=>cardHTML(p,setor)).join(''):'<div class="empty">Nenhum pedido novo</div>';
+  document.getElementById(`${setor}-preparo-body`).innerHTML=preparo.length?preparo.map(p=>cardHTML(p,setor)).join(''):'<div class="empty">Nenhum em preparo</div>';
+  document.getElementById(`${setor}-prontos-body`).innerHTML=prontos.length?prontos.map(p=>cardHTML(p,setor)).join(''):'<div class="empty">Nenhum pronto</div>';
+  document.getElementById(`${setor}-stats`).innerHTML=`
+    <div class="stat"><div class="stat-label">Novos</div><div class="stat-value" style="color:#e24b4a">${novos.length}</div></div>
+    <div class="stat"><div class="stat-label">${setor==='bar'?'Separando':'Em Preparo'}</div><div class="stat-value" style="color:var(--accent)">${preparo.length}</div></div>
+    <div class="stat"><div class="stat-label">Entregues Hoje</div><div class="stat-value" style="color:var(--success)">${hist.length}</div></div>
+    <div class="stat"><div class="stat-label">Total Hoje</div><div class="stat-value" style="color:#fff">${pedidos.length+hist.length}</div></div>
+  `;
+}
+
+function renderHist(setor){
+  const hist=setor==='bar'?histBar:histCoz;
+  const el=document.getElementById(`${setor}-hist-body`);
+  if(!hist.length){el.innerHTML='<div class="empty">Nenhum entregue ainda</div>';return;}
+  el.innerHTML=hist.map(h=>`<div class="hist-row">
+    <span class="hist-mesa">Mesa ${h.mesa}</span>
+    <span class="hist-itens">${h.itens.map(i=>i.qty+'x '+i.nome).join(', ')}</span>
+    <span class="hist-hora">${h.hora}</span>
+    <span class="hist-badge">Entregue</span>
+  </div>`).join('');
+}
+
+function mover(setor,id,status){
+  const lista=setor==='bar'?pedidosBar:pedidosCoz;
+  const p=lista.find(x=>x.id===id);
+  if(!p)return;
+  if(status==='entregue'){
+    const now=new Date();
+    const hora=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+    if(setor==='bar')histBar.unshift({id:p.id,mesa:p.mesa,itens:p.itens,hora});
+    else histCoz.unshift({id:p.id,mesa:p.mesa,itens:p.itens,hora});
+    if(setor==='bar')pedidosBar=pedidosBar.filter(x=>x.id!==id);
+    else pedidosCoz=pedidosCoz.filter(x=>x.id!==id);
+    renderHist(setor);
+  }else{
+    p.status=status;
+  }
+  renderSetor(setor);
+}
+
+function setSetor(s){
+  document.getElementById('sec-bar').classList.toggle('active',s==='bar');
+  document.getElementById('sec-coz').classList.toggle('active',s==='coz');
+  document.getElementById('tab-bar').className='setor-tab'+(s==='bar'?' active-bar':'');
+  document.getElementById('tab-coz').className='setor-tab'+(s==='coz'?' active-coz':'');
+  const color=s==='bar'?'#378add':'#e24b4a';
+  document.getElementById('header-icon').style.background=color;
+  document.getElementById('header-icon').textContent=s==='bar'?'🍺':'👨‍🍳';
+  document.getElementById('header-sub').textContent=s==='bar'?'Bar':'Cozinha';
+  document.getElementById('live-badge').style.background=color+'33';
+  document.getElementById('live-badge').style.color=color;
+  document.querySelector('.ping').style.background=color;
+}
+
+function showSubTab(setor,tab,el){
+  const parent=document.getElementById('sec-'+setor);
+  parent.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  parent.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`${setor}-${tab}`).classList.add('active');
+  if(tab==='historico')renderHist(setor);
+}
+
+function atualizarRelogio(){
+  const now=new Date();
+  document.getElementById('relogio').textContent=
+    now.getHours().toString().padStart(2,'0')+':'+
+    now.getMinutes().toString().padStart(2,'0')+':'+
+    now.getSeconds().toString().padStart(2,'0');
+}
+
+setInterval(()=>{renderSetor('bar');renderSetor('coz');atualizarRelogio();},5000);
+atualizarRelogio();
+renderSetor('bar');
+renderSetor('coz');
+renderHist('bar');
+renderHist('coz');
+</script>
+</body>
+</html>

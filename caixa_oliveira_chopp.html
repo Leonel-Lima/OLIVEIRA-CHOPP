@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oliveira Chopp — Caixa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg1:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;--accent:#f5a623;--accent2:#d4881a;--text1:#fff;--text2:#a0a0a0;--border:#333;--success:#1d9e75;--danger:#e24b4a;--info:#378add}
+body{background:#0f0f0f;font-family:'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px}
+.header{background:#1a1a1a;border-bottom:1px solid #333;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-size:16px;font-weight:600;color:#fff}
+.logo-sub{font-size:11px;color:var(--text2)}
+.badge{background:var(--accent);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px}
+.stat{background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.stat-value{font-size:20px;font-weight:700}
+.stat-value.amber{color:var(--accent)}
+.stat-value.green{color:var(--success)}
+.stat-value.blue{color:var(--info)}
+.stat-value.white{color:#fff}
+.section-label{font-size:12px;font-weight:700;color:var(--accent);padding:0 16px 8px;letter-spacing:.5px;text-transform:uppercase}
+.mesas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:0 16px 16px}
+.mesa-card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px;cursor:pointer;transition:.2s}
+.mesa-card:hover{border-color:var(--accent)}
+.mesa-card.selecionada{border-color:var(--accent);background:#242424}
+.mesa-card.fechada{opacity:.4}
+.mesa-num{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.mesa-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.mesa-status.livre{background:#1d9e7533;color:var(--success)}
+.mesa-status.ocupada{background:#f5a62333;color:var(--accent)}
+.mesa-total{font-size:14px;font-weight:700;color:var(--accent)}
+.mesa-itens{font-size:11px;color:var(--text2);margin-top:2px}
+.detalhe{background:#1a1a1a;border:1px solid #333;border-radius:14px;margin:0 16px 16px;padding:16px}
+.detalhe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.detalhe-title{font-size:15px;font-weight:700;color:#fff}
+.detalhe-mesa{font-size:13px;color:var(--text2)}
+.pedido-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #2a2a2a}
+.pedido-info{flex:1}
+.pedido-nome{font-size:13px;color:#fff}
+.pedido-qty{font-size:11px;color:var(--text2);margin-top:2px}
+.pedido-preco{font-size:13px;font-weight:700;color:var(--accent)}
+.desconto-row{display:flex;align-items:center;gap:10px;margin:12px 0}
+.desconto-label{font-size:13px;color:var(--text2);white-space:nowrap}
+.desconto-input{background:#242424;border:1px solid #333;color:#fff;padding:7px 10px;border-radius:8px;font-size:13px;width:80px;outline:none;text-align:center}
+.desconto-input:focus{border-color:var(--accent)}
+.desconto-tipo{display:flex;gap:4px}
+.tipo-btn{padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid #333;background:#242424;color:var(--text2);transition:.15s}
+.tipo-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.totais{margin:10px 0}
+.totais-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;color:var(--text2)}
+.totais-row.total{font-size:16px;font-weight:700;color:#fff;border-top:1px solid #333;padding-top:10px;margin-top:4px}
+.totais-row.total span:last-child{color:var(--accent)}
+.pgto-title{font-size:13px;font-weight:600;color:#fff;margin:12px 0 8px}
+.pgto-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pgto-btn{padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #333;background:#242424;color:#fff;transition:.2s;text-align:center}
+.pgto-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.pgto-btn:hover:not(.active){border-color:var(--accent)}
+.troco-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.troco-label{font-size:13px;color:var(--text2);white-space:nowrap}
+.troco-input{background:#242424;border:1px solid #333;color:#fff;padding:7px 10px;border-radius:8px;font-size:13px;flex:1;outline:none}
+.troco-input:focus{border-color:var(--accent)}
+.troco-result{font-size:12px;color:var(--success);margin-top:4px}
+.action-btns{display:flex;gap:8px}
+.btn{padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s;flex:1;text-align:center}
+.btn-print{background:#242424;color:#fff;border:1px solid #333}
+.btn-print:hover{background:#2e2e2e}
+.btn-fechar{background:var(--success);color:#fff}
+.btn-fechar:hover{background:#17845f}
+.empty-detalhe{text-align:center;padding:30px;color:var(--text2);font-size:13px}
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal-wrap.hidden{display:none}
+.modal{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:24px;width:100%;max-width:360px;margin:20px;text-align:center}
+.modal-icon{font-size:44px;margin-bottom:12px}
+.modal-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+.modal-btn{width:100%;background:var(--accent);color:#000;font-size:14px;font-weight:700;padding:12px;border:none;border-radius:10px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🧾</div>
+    <div>
+      <div class="logo-text">Oliveira Chopp</div>
+      <div class="logo-sub">Caixa</div>
+    </div>
+  </div>
+  <span class="badge">CAIXA</span>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="section-label">Mesas</div>
+<div class="mesas-grid" id="mesas-grid"></div>
+
+<div class="section-label">Detalhes da Mesa</div>
+<div class="detalhe" id="detalhe">
+  <div class="empty-detalhe">Selecione uma mesa para ver os detalhes</div>
+</div>
+
+<div class="modal-wrap hidden" id="modal-ok">
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title" id="modal-title">Conta fechada!</div>
+    <div class="modal-sub" id="modal-sub">Mesa liberada com sucesso.</div>
+    <button class="modal-btn" onclick="fecharModal()">Ok</button>
+  </div>
+</div>
+
+<script>
+const mesas=[
+  {id:1,num:'01',status:'ocupada',pedidos:[
+    {nome:'Chopp Pilsen 500ml',qty:3,preco:12.00,emoji:'🍺'},
+    {nome:'Churrasquinho de Carne',qty:4,preco:6.00,emoji:'🍢'},
+    {nome:'Refrigerante Lata',qty:2,preco:5.00,emoji:'🥤'},
+  ]},
+  {id:2,num:'02',status:'ocupada',pedidos:[
+    {nome:'Chopp Escuro 300ml',qty:2,preco:9.00,emoji:'🍺'},
+    {nome:'Porção de Fritas',qty:1,preco:18.00,emoji:'🍟'},
+    {nome:'Água Mineral',qty:2,preco:3.00,emoji:'💧'},
+  ]},
+  {id:3,num:'03',status:'livre',pedidos:[]},
+  {id:4,num:'04',status:'ocupada',pedidos:[
+    {nome:'Cerveja Long Neck',qty:5,preco:10.00,emoji:'🍻'},
+    {nome:'Churrasquinho Kafta',qty:3,preco:7.00,emoji:'🍢'},
+  ]},
+  {id:5,num:'05',status:'livre',pedidos:[]},
+  {id:6,num:'06',status:'ocupada',pedidos:[
+    {nome:'Chopp Pilsen 300ml',qty:4,preco:8.00,emoji:'🍺'},
+    {nome:'Churrasquinho de Queijo',qty:2,preco:5.00,emoji:'🍢'},
+  ]},
+  {id:7,num:'07',status:'livre',pedidos:[]},
+  {id:8,num:'08',status:'livre',pedidos:[]},
+];
+let mesaSel=null;
+let descVal=0,descTipo='%';
+let pgtoSel='dinheiro';
+let vendaDia=0;
+
+function totalMesa(m){return m.pedidos.reduce((s,p)=>s+p.preco*p.qty,0);}
+
+function renderStats(){
+  const ocupadas=mesas.filter(m=>m.status==='ocupada').length;
+  const livres=mesas.filter(m=>m.status==='livre').length;
+  const totalAberto=mesas.filter(m=>m.status==='ocupada').reduce((s,m)=>s+totalMesa(m),0);
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Mesas Ocupadas</div><div class="stat-value amber">${ocupadas}</div></div>
+    <div class="stat"><div class="stat-label">Mesas Livres</div><div class="stat-value green">${livres}</div></div>
+    <div class="stat"><div class="stat-label">Em Aberto</div><div class="stat-value blue">R$ ${totalAberto.toFixed(2)}</div></div>
+    <div class="stat"><div class="stat-label">Vendas Hoje</div><div class="stat-value white">R$ ${vendaDia.toFixed(2)}</div></div>
+  `;
+}
+
+function renderMesas(){
+  document.getElementById('mesas-grid').innerHTML=mesas.map(m=>{
+    const tot=totalMesa(m);
+    const sel=mesaSel&&mesaSel.id===m.id?'selecionada':'';
+    return `<div class="mesa-card ${m.status} ${sel}" onclick="selMesa(${m.id})">
+      <div class="mesa-num">Mesa ${m.num}</div>
+      <span class="mesa-status ${m.status}">${m.status==='ocupada'?'Ocupada':'Livre'}</span>
+      ${m.status==='ocupada'?`<div class="mesa-total">R$ ${tot.toFixed(2)}</div><div class="mesa-itens">${m.pedidos.reduce((s,p)=>s+p.qty,0)} itens</div>`:'<div class="mesa-itens">Disponível</div>'}
+    </div>`;
+  }).join('');
+}
+
+function selMesa(id){
+  mesaSel=mesas.find(m=>m.id===id);
+  descVal=0;descTipo='%';pgtoSel='dinheiro';
+  renderMesas();
+  renderDetalhe();
+}
+
+function renderDetalhe(){
+  const el=document.getElementById('detalhe');
+  if(!mesaSel||mesaSel.status==='livre'){
+    el.innerHTML=`<div class="empty-detalhe">${mesaSel?'Mesa '+mesaSel.num+' está livre — sem pedidos.':'Selecione uma mesa para ver os detalhes'}</div>`;
+    return;
+  }
+  const subtotal=totalMesa(mesaSel);
+  const desc=descTipo==='%'?subtotal*(descVal/100):Math.min(descVal,subtotal);
+  const total=subtotal-desc;
+  el.innerHTML=`
+    <div class="detalhe-header">
+      <div><div class="detalhe-title">Mesa ${mesaSel.num}</div><div class="detalhe-mesa">${mesaSel.pedidos.reduce((s,p)=>s+p.qty,0)} itens</div></div>
+    </div>
+    ${mesaSel.pedidos.map(p=>`
+      <div class="pedido-row">
+        <div class="pedido-info">
+          <div class="pedido-nome">${p.emoji} ${p.nome}</div>
+          <div class="pedido-qty">${p.qty}x R$ ${p.preco.toFixed(2)}</div>
+        </div>
+        <span class="pedido-preco">R$ ${(p.preco*p.qty).toFixed(2)}</span>
+      </div>`).join('')}
+    <div class="desconto-row">
+      <span class="desconto-label">Desconto:</span>
+      <input class="desconto-input" type="number" min="0" value="${descVal}" id="desc-input" oninput="setDesc(this.value)">
+      <div class="desconto-tipo">
+        <button class="tipo-btn ${descTipo==='%'?'active':''}" onclick="setTipo('%')">%</button>
+        <button class="tipo-btn ${descTipo==='R$'?'active':''}" onclick="setTipo('R$')">R$</button>
+      </div>
+    </div>
+    <div class="totais">
+      <div class="totais-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2)}</span></div>
+      ${desc>0?`<div class="totais-row"><span>Desconto (${descTipo==='%'?descVal+'%':'R$ '+descVal})</span><span style="color:var(--success)">- R$ ${desc.toFixed(2)}</span></div>`:''}
+      <div class="totais-row total"><span>Total</span><span>R$ ${total.toFixed(2)}</span></div>
+    </div>
+    <div class="pgto-title">Forma de Pagamento</div>
+    <div class="pgto-btns">
+      <div class="pgto-btn ${pgtoSel==='dinheiro'?'active':''}" onclick="setPgto('dinheiro')">💵 Dinheiro</div>
+      <div class="pgto-btn ${pgtoSel==='cartao'?'active':''}" onclick="setPgto('cartao')">💳 Cartão</div>
+      <div class="pgto-btn ${pgtoSel==='pix'?'active':''}" onclick="setPgto('pix')">📲 Pix</div>
+    </div>
+    ${pgtoSel==='dinheiro'?`
+      <div class="troco-row">
+        <span class="troco-label">Recebido:</span>
+        <input class="troco-input" type="number" id="recebido" placeholder="R$ 0,00" oninput="calcTroco(${total})">
+      </div>
+      <div class="troco-result" id="troco-result"></div>`:''}
+    <div class="action-btns" style="margin-top:12px">
+      <button class="btn btn-print" onclick="imprimirComanda(${mesaSel.id})">🖨️ Imprimir</button>
+      <button class="btn btn-fechar" onclick="fecharConta(${mesaSel.id},${total})">✔ Fechar Conta</button>
+    </div>
+  `;
+}
+
+function setDesc(v){descVal=parseFloat(v)||0;renderDetalhe();}
+function setTipo(t){descTipo=t;renderDetalhe();}
+function setPgto(t){pgtoSel=t;renderDetalhe();}
+function calcTroco(total){
+  const rec=parseFloat(document.getElementById('recebido').value)||0;
+  const troco=rec-total;
+  const el=document.getElementById('troco-result');
+  if(rec>0)el.textContent=troco>=0?'Troco: R$ '+troco.toFixed(2):'Valor insuficiente';
+  else el.textContent='';
+}
+
+function fecharConta(id,total){
+  const m=mesas.find(x=>x.id===id);
+  vendaDia+=total;
+  m.status='livre';
+  m.pedidos=[];
+  mesaSel=null;
+  renderStats();
+  renderMesas();
+  renderDetalhe();
+  document.getElementById('modal-title').textContent='Conta fechada!';
+  document.getElementById('modal-sub').textContent='Mesa '+m.num+' — R$ '+total.toFixed(2)+' recebido via '+pgtoSel+'. Mesa liberada com sucesso!';
+  document.getElementById('modal-ok').classList.remove('hidden');
+}
+
+function imprimirComanda(id){
+  const m=mesas.find(x=>x.id===id);
+  const subtotal=totalMesa(m);
+  const desc=descTipo==='%'?subtotal*(descVal/100):Math.min(descVal,subtotal);
+  const total=subtotal-desc;
+  const linhas=m.pedidos.map(p=>`${p.qty}x ${p.nome} ........ R$ ${(p.preco*p.qty).toFixed(2)}`).join('\n');
+  document.getElementById('modal-title').textContent='🖨️ Comanda — Mesa '+m.num;
+  document.getElementById('modal-sub').innerHTML=`<pre style="text-align:left;font-size:12px;color:#ccc;line-height:1.8">${linhas}\n${'─'.repeat(32)}\nTotal: R$ ${total.toFixed(2)}\nPagamento: ${pgtoSel}</pre>`;
+  document.getElementById('modal-ok').classList.remove('hidden');
+}
+
+function fecharModal(){document.getElementById('modal-ok').classList.add('hidden');}
+
+renderStats();
+renderMesas();
+</script>
+</body>
+</html>

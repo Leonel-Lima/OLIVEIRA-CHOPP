@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oliveira Chopp — Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg1:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;--accent:#f5a623;--accent2:#d4881a;--text1:#ffffff;--text2:#a0a0a0;--border:#333;--danger:#e24b4a;--success:#1d9e75}
+body{background:var(--bg1);color:var(--text1);font-family:'Segoe UI',sans-serif;min-height:100vh}
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-size:16px;font-weight:600;color:#fff}
+.logo-sub{font-size:11px;color:var(--text2)}
+.badge{background:var(--accent);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;gap:4px}
+.tab{padding:10px 16px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover:not(.active){color:#fff}
+.content{padding:20px;max-width:900px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:var(--bg3);color:#fff;border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg4)}
+.btn-danger{background:transparent;color:#fff;border:1px solid var(--danger);padding:5px 10px;font-size:12px}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-edit{background:transparent;color:#fff;border:1px solid var(--accent);padding:5px 10px;font-size:12px}
+.btn-edit:hover{background:var(--accent);color:#000}
+.search{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;outline:none}
+.search::placeholder{color:var(--text2)}
+.search:focus{border-color:var(--accent)}
+.cat-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.cat-btn{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:#fff;transition:.15s}
+.cat-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.cat-btn:hover:not(.active){border-color:var(--accent)}
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.item-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;transition:.2s}
+.item-card:hover{border-color:var(--accent)}
+.item-card.inativo{opacity:.5}
+.item-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.item-emoji{width:40px;height:40px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.item-info{flex:1;min-width:0}
+.item-name{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-cat{font-size:11px;color:var(--text2);margin-top:2px}
+.item-price{font-size:18px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.item-actions{display:flex;gap:6px;align-items:center}
+.status-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:none;margin-left:auto;transition:.2s}
+.status-btn.ativo{background:var(--success);color:#fff}
+.status-btn.inativo{background:var(--danger);color:#fff}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:420px;margin:20px}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:18px;color:#fff}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);color:#fff;padding:9px 12px;border-radius:8px;font-size:14px;outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select option{background:var(--bg2);color:#fff}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.stat-value{font-size:22px;font-weight:700;color:#fff}
+.stat-value.amber{color:var(--accent)}
+.stat-value.green{color:var(--success)}
+.empty{text-align:center;padding:40px;color:var(--text2);font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🍺</div>
+    <div>
+      <div class="logo-text">Oliveira Chopp</div>
+      <div class="logo-sub">Painel Administrativo</div>
+    </div>
+  </div>
+  <span class="badge">ADMIN</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('cardapio')">Cardápio</div>
+  <div class="tab" onclick="showTab('categorias')">Categorias</div>
+  <div class="tab" onclick="showTab('resumo')">Resumo</div>
+</div>
+
+<div class="content">
+  <div class="section active" id="sec-cardapio">
+    <div class="toolbar">
+      <input class="search" placeholder="Buscar item..." oninput="filtrar()" id="busca">
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Item</button>
+    </div>
+    <div class="cat-filter" id="cat-filter"></div>
+    <div class="items-grid" id="items-grid"></div>
+  </div>
+
+  <div class="section" id="sec-categorias">
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="abrirModalCat()">+ Nova Categoria</button>
+    </div>
+    <div id="cat-list"></div>
+  </div>
+
+  <div class="section" id="sec-resumo">
+    <div class="stats" id="stats"></div>
+    <div id="resumo-lista"></div>
+  </div>
+</div>
+
+<!-- Modal Item -->
+<div class="modal-bg" id="modal-item">
+  <div class="modal">
+    <h3 id="modal-title">Novo Item</h3>
+    <div class="field"><label>Nome</label><input id="f-nome" placeholder="Ex: Chopp Pilsen 300ml"></div>
+    <div class="field"><label>Categoria</label><select id="f-cat"></select></div>
+    <div class="field"><label>Preço (R$)</label><input id="f-preco" type="number" step="0.50" placeholder="0,00"></div>
+    <div class="field"><label>Emoji</label><input id="f-emoji" placeholder="🍺" maxlength="2"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarItem()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Categoria -->
+<div class="modal-bg" id="modal-cat">
+  <div class="modal">
+    <h3>Nova Categoria</h3>
+    <div class="field"><label>Nome da Categoria</label><input id="fc-nome" placeholder="Ex: Porções"></div>
+    <div class="field"><label>Emoji</label><input id="fc-emoji" placeholder="🍽️" maxlength="2"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModalCat()">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarCat()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let cats=[
+  {id:1,nome:'Chopps',emoji:'🍺'},
+  {id:2,nome:'Cervejas',emoji:'🍻'},
+  {id:3,nome:'Churrasquinho',emoji:'🍢'},
+  {id:4,nome:'Porções',emoji:'🍽️'},
+  {id:5,nome:'Refrigerantes',emoji:'🥤'}
+];
+let items=[
+  {id:1,nome:'Chopp Pilsen 300ml',cat:1,preco:8.00,emoji:'🍺',ativo:true},
+  {id:2,nome:'Chopp Pilsen 500ml',cat:1,preco:12.00,emoji:'🍺',ativo:true},
+  {id:3,nome:'Chopp Escuro 300ml',cat:1,preco:9.00,emoji:'🍺',ativo:true},
+  {id:4,nome:'Cerveja Lata',cat:2,preco:7.00,emoji:'🍻',ativo:true},
+  {id:5,nome:'Cerveja Long Neck',cat:2,preco:10.00,emoji:'🍻',ativo:true},
+  {id:6,nome:'Churrasquinho de Queijo',cat:3,preco:5.00,emoji:'🍢',ativo:true},
+  {id:7,nome:'Churrasquinho de Carne',cat:3,preco:6.00,emoji:'🍢',ativo:true},
+  {id:8,nome:'Churrasquinho de Frango',cat:3,preco:6.00,emoji:'🍢',ativo:true},
+  {id:9,nome:'Churrasquinho Kafta',cat:3,preco:7.00,emoji:'🍢',ativo:true},
+  {id:10,nome:'Porção de Fritas',cat:4,preco:18.00,emoji:'🍟',ativo:true},
+  {id:11,nome:'Refrigerante Lata',cat:5,preco:5.00,emoji:'🥤',ativo:true},
+  {id:12,nome:'Água Mineral',cat:5,preco:3.00,emoji:'💧',ativo:true},
+];
+let catAtiva=0,editId=null,nextId=20;
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
+  const tabs=['cardapio','categorias','resumo'];
+  document.querySelectorAll('.tab')[tabs.indexOf(t)].classList.add('active');
+  document.getElementById('sec-'+t).classList.add('active');
+  if(t==='categorias')renderCats();
+  if(t==='resumo')renderResumo();
+}
+
+function renderFiltros(){
+  document.getElementById('cat-filter').innerHTML=
+    `<button class="cat-btn ${catAtiva===0?'active':''}" onclick="setCat(0)">Todos</button>`+
+    cats.map(c=>`<button class="cat-btn ${catAtiva===c.id?'active':''}" onclick="setCat(${c.id})">${c.emoji} ${c.nome}</button>`).join('');
+}
+function setCat(id){catAtiva=id;renderFiltros();renderItems();}
+
+function renderItems(){
+  const busca=document.getElementById('busca').value.toLowerCase();
+  const filtered=items.filter(i=>(catAtiva===0||i.cat===catAtiva)&&i.nome.toLowerCase().includes(busca));
+  const grid=document.getElementById('items-grid');
+  if(!filtered.length){grid.innerHTML='<div class="empty">Nenhum item encontrado</div>';return;}
+  grid.innerHTML=filtered.map(i=>{
+    const cat=cats.find(c=>c.id===i.cat);
+    return `<div class="item-card ${i.ativo?'':'inativo'}">
+      <div class="item-top">
+        <div class="item-emoji">${i.emoji}</div>
+        <div class="item-info">
+          <div class="item-name">${i.nome}</div>
+          <div class="item-cat">${cat?cat.emoji+' '+cat.nome:''}</div>
+        </div>
+      </div>
+      <div class="item-price">R$ ${i.preco.toFixed(2)}</div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="editarItem(${i.id})">Editar</button>
+        <button class="btn btn-danger" onclick="deletarItem(${i.id})">Excluir</button>
+        <button class="status-btn ${i.ativo?'ativo':'inativo'}" onclick="toggleItem(${i.id})">${i.ativo?'✔ Ativo':'✖ Inativo'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrar(){renderItems();}
+function toggleItem(id){const i=items.find(x=>x.id===id);if(i)i.ativo=!i.ativo;renderItems();}
+function deletarItem(id){if(confirm('Excluir item?'))items=items.filter(x=>x.id!==id);renderItems();}
+
+function abrirModal(id=null){
+  editId=id;
+  const sel=document.getElementById('f-cat');
+  sel.innerHTML=cats.map(c=>`<option value="${c.id}">${c.emoji} ${c.nome}</option>`).join('');
+  if(id){
+    const i=items.find(x=>x.id===id);
+    document.getElementById('modal-title').textContent='Editar Item';
+    document.getElementById('f-nome').value=i.nome;
+    document.getElementById('f-preco').value=i.preco;
+    document.getElementById('f-emoji').value=i.emoji;
+    sel.value=i.cat;
+  }else{
+    document.getElementById('modal-title').textContent='Novo Item';
+    document.getElementById('f-nome').value='';
+    document.getElementById('f-preco').value='';
+    document.getElementById('f-emoji').value='';
+  }
+  document.getElementById('modal-item').classList.add('open');
+}
+function editarItem(id){abrirModal(id);}
+function fecharModal(){document.getElementById('modal-item').classList.remove('open');}
+function salvarItem(){
+  const nome=document.getElementById('f-nome').value.trim();
+  const preco=parseFloat(document.getElementById('f-preco').value);
+  const emoji=document.getElementById('f-emoji').value||'🍽️';
+  const cat=parseInt(document.getElementById('f-cat').value);
+  if(!nome||isNaN(preco))return alert('Preencha nome e preço!');
+  if(editId){const i=items.find(x=>x.id===editId);i.nome=nome;i.preco=preco;i.emoji=emoji;i.cat=cat;}
+  else items.push({id:nextId++,nome,cat,preco,emoji,ativo:true});
+  fecharModal();renderItems();
+}
+
+function renderCats(){
+  document.getElementById('cat-list').innerHTML=cats.map(c=>{
+    const qtd=items.filter(i=>i.cat===c.id).length;
+    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <span style="font-size:24px">${c.emoji}</span>
+      <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#fff">${c.nome}</div><div style="font-size:12px;color:var(--text2)">${qtd} item${qtd!==1?'s':''}</div></div>
+      <button class="btn btn-danger" onclick="deletarCat(${c.id})">Excluir</button>
+    </div>`;
+  }).join('');
+}
+function abrirModalCat(){document.getElementById('fc-nome').value='';document.getElementById('fc-emoji').value='';document.getElementById('modal-cat').classList.add('open');}
+function fecharModalCat(){document.getElementById('modal-cat').classList.remove('open');}
+function salvarCat(){
+  const nome=document.getElementById('fc-nome').value.trim();
+  const emoji=document.getElementById('fc-emoji').value||'🍽️';
+  if(!nome)return alert('Informe o nome!');
+  cats.push({id:nextId++,nome,emoji});
+  fecharModalCat();renderCats();renderFiltros();
+}
+function deletarCat(id){
+  if(items.find(i=>i.cat===id))return alert('Remova os itens desta categoria primeiro!');
+  if(confirm('Excluir categoria?'))cats=cats.filter(c=>c.id!==id);
+  renderCats();renderFiltros();
+}
+
+function renderResumo(){
+  const total=items.length,ativos=items.filter(i=>i.ativo).length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Total de Itens</div><div class="stat-value amber">${total}</div></div>
+    <div class="stat"><div class="stat-label">Ativos</div><div class="stat-value green">${ativos}</div></div>
+    <div class="stat"><div class="stat-label">Inativos</div><div class="stat-value">${total-ativos}</div></div>
+    <div class="stat"><div class="stat-label">Categorias</div><div class="stat-value amber">${cats.length}</div></div>`;
+  document.getElementById('resumo-lista').innerHTML=cats.map(c=>{
+    const its=items.filter(i=>i.cat===c.id&&i.ativo);
+    if(!its.length)return '';
+    return `<div style="margin-bottom:16px"><div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">${c.emoji} ${c.nome}</div>`+
+      its.map(i=>`<div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;font-size:13px;color:#fff">
+        <span>${i.emoji} ${i.nome}</span><span style="color:var(--accent);font-weight:600">R$ ${i.preco.toFixed(2)}</span>
+      </div>`).join('')+'</div>';
+  }).join('');
+}
+
+renderFiltros();
+renderItems();
+</script>
+</body>
+</html>
